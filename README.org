@@ -1,0 +1,17 @@
+* sdcv2anki
+This tool can generate dictionary file (plain text) via [[https://sourceforge.net/projects/sdcv/?source=typ_redirect][sdcv]], which can be imported to [[http://ankisrs.net/][Anki]].
+
+Words are read from =~/dic.txt= and definitions are gotten from =sdcv=.
+
+(You can add word to =~/dic.txt= by pressing =Alt-e= in =stardict=)
+
+* Requirement
+- Python 3
+- sdcv 0.5.0-beta4
+
+* Todo
+- [ ] Remove (or archive) all words in =~/dic.txt= after exporting.
+- [ ] Remove all duplicated words before exporting.
+
+* License
+WTFPL 2.0
