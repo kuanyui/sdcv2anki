@@ -4,18 +4,28 @@ import os, re, argparse, subprocess
 
 STARDICT_DICT_FILE_PATH = os.path.expanduser("~/dic.txt")
 
+
+
 def sdcv(word):
     cmd = subprocess.Popen(['sdcv', '-n', word], stdout=subprocess.PIPE)
-    output = cmd.stdout.read()
-    output = output.decode('utf-8')
-    formattedOut = re.sub(r'(.+)\n', r'\1<br/>', output)
+    out = cmd.stdout.read()
+    raw = out.decode('utf-8')
+    # dirty hack for latest XML dict format.
+    formattedOut = re.sub(r'<[^\!]+?>', r'', raw)
+    formattedOut = re.sub(r'<\!\[CDATA\[(.+?)\]\]>', r'\1\n', formattedOut)
+    
+    formattedOut = re.sub(r'(.+)\n', r'\1<br/>', formattedOut)
     formattedOut = re.sub(r'-->(.+)<br/>-->(.+)<br/>',
                           r"<h5 style='background-color:#666; color:#88bbff; margin:0;'>\1</h5>"\
                           r"<h3 style='background-color:#666; color:#fff; margin:0;'>\2</h3>"
                           , formattedOut)
+
     formattedOut = re.sub(r'\n', r'<br/>', formattedOut)
+    formattedOut = re.sub(r'(<br/>)+', r'<br/>', formattedOut)
+    print(formattedOut)
             # print(formattedOut)
     return formattedOut
+
 
 def process(ARGS):
     FIN = [] # [(word, definition), ...]
