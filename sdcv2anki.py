@@ -2,10 +2,6 @@
 # -*- coding: utf-8 -*-
 import os, re, argparse, subprocess
 
-STARDICT_DICT_FILE_PATH = os.path.expanduser("~/dic.txt")
-
-
-
 def sdcv(word):
     cmd = subprocess.Popen(['sdcv', '-n', word], stdout=subprocess.PIPE)
     out = cmd.stdout.read()
@@ -22,15 +18,14 @@ def sdcv(word):
 
     formattedOut = re.sub(r'\n', r'<br/>', formattedOut)
     formattedOut = re.sub(r'(<br/>)+', r'<br/>', formattedOut)
-    print(formattedOut)
-            # print(formattedOut)
+
     return formattedOut
 
 
 def process(ARGS):
     FIN = [] # [(word, definition), ...]
     
-    with open(STARDICT_DICT_FILE_PATH, 'r') as file:
+    with open(os.path.expanduser(ARGS.input_file), 'r') as file:
         while True:
             line = file.readline()
             word = line[0:-1]
@@ -54,10 +49,13 @@ def parseArguments():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     _parser.add_argument("-o", "--output-filename", nargs="?", metavar="FILE NAME",
                          default='export.txt',
-                         help='specify the exporting filename.')
+                         help='exporting filename.')
     _parser.add_argument("-r", "--output-root-directory", nargs="?", metavar="ROOT DIR",
                          default='~/Anki/sdcv/',
-                         help='specify the root path of exported file.')
+                         help='root path of exported file.')
+    _parser.add_argument("-i", "--input-file", nargs="?", metavar="FILE PATH",
+                         default='~/dic.txt',
+                         help='input file')
     return _parser.parse_args()
 
 
